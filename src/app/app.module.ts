@@ -8,6 +8,7 @@ import { DirectivaComponent } from './components/directiva/directiva.component';
 import { ClientesComponent } from './components/clientes/clientes.component';
 import {ClienteService} from './service/cliente.service';
 import {APP_ROUTING} from './app.routes';
+import {HttpClientModule} from '@angular/common/http';
 
 // Esto es muy parecido a lo que en spring viene siendo nuestro contenedor
 
@@ -21,7 +22,8 @@ import {APP_ROUTING} from './app.routes';
   ],
   imports: [
     BrowserModule,
-    APP_ROUTING
+    APP_ROUTING,
+    HttpClientModule
   ],
   providers: [
     ClienteService
