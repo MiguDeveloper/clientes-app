@@ -13,7 +13,9 @@ export class FormComponent implements OnInit {
   private titulo: string = 'Registrar Cliente';
   private cliente: Cliente = new Cliente();
 
-  constructor(private clienteService: ClienteService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private clienteService: ClienteService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -41,6 +43,17 @@ export class FormComponent implements OnInit {
           cliente => this.cliente = cliente
         );
       }
+    });
+  }
+
+  update(): void {
+    this.clienteService.updateCliente(this.cliente).subscribe(cliente => {
+      this.router.navigate(['/clientes']);
+      swal(
+        'Cliente Actualizado',
+        `El cliente ${cliente.nombre} ${cliente.apellido} ha sido actualizado con exito`,
+        'success'
+      );
     });
   }
 }
