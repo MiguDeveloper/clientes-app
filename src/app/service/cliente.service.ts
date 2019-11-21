@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Cliente} from '../components/clientes/cliente';
 import {CLIENTES} from '../components/clientes/clientes.json';
 import {Observable, of} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,10 @@ import {HttpClient} from '@angular/common/http';
 export class ClienteService {
 
   private urlEndPoint: string = 'http://localhost:8080/api/clientes';
-  constructor(private http: HttpClient) { }
+  private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
+
+  constructor(private http: HttpClient) {
+  }
 
   // Metodo getClientes(): permite listar todos los clientes
   getClientes(): Observable<Cliente[]> {
@@ -26,6 +29,14 @@ export class ClienteService {
 
     // aqui es cuando consumimos del archivo estatico json y lo retornamos a la vista
     // return of(CLIENTES);
+  }
+
+  create(cliente: Cliente): Observable<Cliente> {
+    return this.http.post<Cliente>(this.urlEndPoint, cliente, {headers: this.httpHeaders});
+  }
+
+  getCliente(id): Observable<Cliente>{
+    return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`);
   }
 
 }
