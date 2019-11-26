@@ -12,6 +12,7 @@ export class FormComponent implements OnInit {
 
   private titulo: string = 'Registrar Cliente';
   private cliente: Cliente = new Cliente();
+  private errores: string[]; // usamos esta variable para capturar los errores de validacion
 
   constructor(private clienteService: ClienteService,
               private router: Router,
@@ -24,13 +25,18 @@ export class FormComponent implements OnInit {
 
   create(): void {
     this.clienteService.create(this.cliente).subscribe(
-      cliente => {
+      json => {
         this.router.navigate(['/clientes']);
         swal(
           'Nuevo Clientes',
-          `Cliente ${cliente.nombre} creado con éxito`,
+          `${json.mensaje}: ${json.cliente.nombre}`,
           'success'
         );
+      },
+      err => {
+        this.errores = err.error.errors as string[];
+        console.log('Codigo de error desde el backend: ' + err.status);
+        console.log(err.error.errors);
       }
     );
   }
@@ -47,13 +53,19 @@ export class FormComponent implements OnInit {
   }
 
   update(): void {
-    this.clienteService.updateCliente(this.cliente).subscribe(cliente => {
-      this.router.navigate(['/clientes']);
-      swal(
-        'Cliente Actualizado',
-        `El cliente ${cliente.nombre} ${cliente.apellido} ha sido actualizado con exito`,
-        'success'
-      );
-    });
+    this.clienteService.updateCliente(this.cliente).subscribe(json => {
+        this.router.navigate(['/clientes']);
+        swal(
+          'Cliente Actualizado',
+          `${json.mensaje}: ${json.cliente.nombre}`,
+          'success'
+        );
+      },
+      err => {
+        this.errores = err.error.errors as string[];
+        console.log('Codigo de error desde el backend: ' + err.status);
+        console.log(err.error.errors);
+      }
+    );
   }
 }
